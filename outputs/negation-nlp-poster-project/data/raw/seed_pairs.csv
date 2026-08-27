@@ -1,0 +1,26 @@
+pair_id,original_text,negated_text,original_label,negated_label,negation_type,source,notes
+1,The film is good.,The film is not good.,positive,negative,not,author_created,adjective negation
+2,The service was excellent.,The service was not excellent.,positive,negative,not,author_created,adjective negation
+3,I enjoyed the book.,I did not enjoy the book.,positive,negative,not,author_created,verbal negation
+4,The meal tasted wonderful.,The meal did not taste wonderful.,positive,negative,not,author_created,verbal negation
+5,The staff were helpful.,The staff were not helpful.,positive,negative,not,author_created,adjective negation
+6,I would recommend this hotel.,I would not recommend this hotel.,positive,negative,not,author_created,modal negation
+7,The update improved the app.,The update did not improve the app.,positive,negative,not,author_created,verbal negation
+8,This product works well.,This product does not work well.,positive,negative,not,author_created,verbal negation
+9,I liked the ending.,I didn't like the ending.,positive,negative,contraction,author_created,contracted negation
+10,We loved the performance.,We didn't love the performance.,positive,negative,contraction,author_created,contracted negation
+11,The device is reliable.,The device isn't reliable.,positive,negative,contraction,author_created,contracted negation
+12,The instructions are clear.,The instructions aren't clear.,positive,negative,contraction,author_created,contracted negation
+13,I always enjoy this series.,I never enjoy this series.,positive,negative,never,author_created,frequency negation
+14,The team consistently delivers.,The team never delivers.,positive,negative,never,author_created,frequency negation
+15,The experience was pleasant.,The experience was hardly pleasant.,positive,negative,implicit,author_created,scalar negation
+16,The explanation was useful.,The explanation was far from useful.,positive,negative,implicit,author_created,phrasal negation
+17,The plot is predictable.,The plot is not predictable.,negative,positive,not,author_created,negative adjective reversed
+18,The interface is confusing.,The interface is not confusing.,negative,positive,not,author_created,negative adjective reversed
+19,I disliked the soundtrack.,I did not dislike the soundtrack.,negative,positive,not,author_created,negated negative verb
+20,The task was difficult.,The task was not difficult.,negative,positive,not,author_created,negative adjective reversed
+21,The response was unhelpful.,The response was not unhelpful.,negative,positive,not,author_created,litotes; potentially ambiguous
+22,The result is disappointing.,The result isn't disappointing.,negative,positive,contraction,author_created,contracted reversal
+23,The software frequently crashes.,The software never crashes.,negative,positive,never,author_created,event negation
+24,The room smelled bad.,The room did not smell bad.,negative,positive,not,author_created,verbal negation
+

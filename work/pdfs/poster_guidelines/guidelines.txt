@@ -1,0 +1,76 @@
+Examination: Research Poster
+
+Deadline: 30.09.2026 (end of the day, central European time)
+Group size: 1-2 participants (parallel group internal)
+
+Summary: The poster must be based on empirical work related to a topic covered in the lecture,
+seminar, or exercise component of the NLP module. It may extend your seminar presentation, but this
+is not mandatory. There is no oral presentation. You must submit your poster digitally via STUD.IP,
+together with a mandatory appendix. The following guidelines define all requirements. Read them
+carefully.
+
+
+
+
+Poster
+The poster is the core submission. It must present empirical work in the field of NLP, structured into
+the following three mandatory sections.
+
+Hypothesis: State your research questions clearly. Situate your work within the broader research
+context, explaining what prior work exists and where your contribution fits.
+Methodology: Describe and justify the methods you employed, including the datasets, models, and
+algorithms selected for your task. If your research involves technical implementations, you must
+provide a link to an external repository (e.g. GitLab or GitHub) that allows us to reproduce your
+experiments.
+Results: Present your results using tabular and/or graphical representations. Discuss your findings
+with respect to your original hypothesis, including any limitations or unexpected outcomes.
+
+In addition, your poster must meet the following technical requirements:
+
+   Format: DIN A1 (594 × 841 mm), portrait or landscape orientation
+   Text: Readable in terms of color (sufficient contrast to background objects) and large enough font
+   size for a poster (paragraph should be at least 24 pt)
+   Figures: Readable in terms of resolution (pixel images should have at least 150 PPI)
+
+    ⚠️ While the scientific content is our main grading criteria, we will also assess design and layout
+    aspects including readability, spacing and visual concept (does the design help to strengthen
+    your argument/content, or is it meaningless decoration?).
+
+
+
+
+Appendix
+The appendix is a separate, mandatory PDF document accompanying your poster. It must include the
+following two components.
+
+References: Provide a complete list of all sources consulted. References must primarily be academic
+papers. A collection consisting solely of website links does not qualify as a valid reference list. Non-
+academic sources are valid references in specific cases, including but not limited to: dataset
+documentation or data papers, language model technical reports or model cards, news articles
+relevant to your topic, official software or tool documentation.
+
+Declaration of Academic Integrity: You must include a signed copy of the official university
+declaration of academic integrity. The form is available for download from the University of Trier
+website. Read the declaration carefully, as it regulates the permissible use of AI tools for examination
+purposes. Download declaration (PDF)
+
+
+
+
+Submission
+Upload a single ZIP archive to the posters folder on STUD.IP within your seminar group. The
+archive must contain exactly two PDF files: the poster and the appendix. The ZIP file must be named
+according to the following convention, using your student ID(s). No deviations are accepted:
+{student_id}.zip        or    {student_id_1}_{student_id_2}.zip (Example:          255678.zip     or
+255678_123445.zip    ). The  submission  folder automatically closes after the deadline. We   do not
+accept late submissions.
+
+
+
+
+Submissions failing the above defined
+requirements are automatically graded with 5.0.
+Thus failing the examination. This directive is
+binding and we will not deviate from or discuss
+these guidelines.
+

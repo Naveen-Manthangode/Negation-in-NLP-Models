@@ -1,0 +1,13 @@
+dataset,metric,model_a,model_b,estimate_a,estimate_b,difference_a_minus_b,a_only_correct,b_only_correct,mcnemar_exact_p,n_pairs
+imdb_contrast_negation,accuracy_original,distilbert_sst2,bert_sst2,0.9088050314465409,0.940251572327044,-0.03144654088050314,3,13,0.021270751953125,318
+imdb_contrast_negation,accuracy_counterpart,distilbert_sst2,bert_sst2,0.8836477987421384,0.889937106918239,-0.0062893081761006275,12,14,0.8450189828872681,318
+imdb_contrast_negation,expected_flip_accuracy,distilbert_sst2,bert_sst2,0.7987421383647799,0.8364779874213837,-0.037735849056603765,15,27,0.08842954698775429,318
+imdb_contrast_negation,paired_both_correct,distilbert_sst2,bert_sst2,0.7955974842767296,0.8333333333333334,-0.037735849056603765,15,27,0.08842954698775429,318
+imdb_contrast_negation,accuracy_original,distilbert_sst2,roberta_sentiment,0.9088050314465409,0.9591194968553459,-0.05031446540880502,4,20,0.001543879508972168,318
+imdb_contrast_negation,accuracy_counterpart,distilbert_sst2,roberta_sentiment,0.8836477987421384,0.9528301886792453,-0.0691823899371069,7,29,0.00031255115754902363,318
+imdb_contrast_negation,expected_flip_accuracy,distilbert_sst2,roberta_sentiment,0.7987421383647799,0.9245283018867925,-0.12578616352201255,10,50,1.6163814566157175e-07,318
+imdb_contrast_negation,paired_both_correct,distilbert_sst2,roberta_sentiment,0.7955974842767296,0.9182389937106918,-0.12264150943396224,10,49,2.706279703008907e-07,318
+imdb_contrast_negation,accuracy_original,bert_sst2,roberta_sentiment,0.940251572327044,0.9591194968553459,-0.018867924528301883,5,11,0.210113525390625,318
+imdb_contrast_negation,accuracy_counterpart,bert_sst2,roberta_sentiment,0.889937106918239,0.9528301886792453,-0.06289308176100628,6,26,0.0005350527353584766,318
+imdb_contrast_negation,expected_flip_accuracy,bert_sst2,roberta_sentiment,0.8364779874213837,0.9245283018867925,-0.08805031446540879,10,38,6.169640777642371e-05,318
+imdb_contrast_negation,paired_both_correct,bert_sst2,roberta_sentiment,0.8333333333333334,0.9182389937106918,-0.08490566037735847,10,37,9.848878492846325e-05,318
