@@ -77,7 +77,7 @@ The official AllenAI release contains aligned human-edited original/contrast rev
 
 ```bash
 python -m src.prepare_imdb_contrast
-python -m src.run_experiments --data data/processed/imdb_contrast_negation.csv --dataset-name imdb_contrast_negation --models distilbert_sst2 bert_sst2 roberta_sentiment --device -1
+python -m src.run_experiments --data data/processed/imdb_contrast_negation.csv --dataset-name imdb_contrast_negation --models distilbert_sst2 bert_sst2 roberta_base_sst2 roberta_sentiment --device -1
 python -m src.plot_results
 python -m src.make_poster_tables
 python -m src.demo --dataset-name imdb_contrast_negation --model distilbert_sst2 --errors-only
@@ -86,7 +86,7 @@ python -m src.demo --dataset-name imdb_contrast_negation --model distilbert_sst2
 Calculate paired 95% bootstrap confidence intervals and exact McNemar tests:
 
 ```bash
-python -m src.significance --dataset-name imdb_contrast_negation --models distilbert_sst2 bert_sst2 roberta_sentiment --n-bootstrap 10000 --seed 42
+python -m src.significance --dataset-name imdb_contrast_negation --models distilbert_sst2 bert_sst2 roberta_base_sst2 roberta_sentiment --n-bootstrap 10000 --seed 42
 ```
 
 This creates `results/significance/bootstrap_confidence_intervals.csv` and
@@ -99,10 +99,33 @@ To evaluate all IMDb contrast edits, including changes unrelated to negation:
 
 ```bash
 python -m src.prepare_imdb_contrast --all-contrasts --output data/processed/imdb_contrast_all.csv
-python -m src.run_experiments --data data/processed/imdb_contrast_all.csv --dataset-name imdb_contrast_all --models distilbert_sst2 bert_sst2 roberta_sentiment --device -1
+python -m src.run_experiments --data data/processed/imdb_contrast_all.csv --dataset-name imdb_contrast_all --models distilbert_sst2 bert_sst2 roberta_base_sst2 roberta_sentiment --device -1
 ```
 
 The full set measures general contrast robustness. Only the filtered set directly supports claims about changed negation cues. The downloader retrieves data from the official `allenai/contrast-sets` repository and therefore needs internet access.
+
+The default filtered set is **negation-related**, not negation-only: a pair is
+retained when a human edit changes the count of a recognized negation cue, but
+the edit may change other sentiment-bearing words too. Each generated row now
+records `changed_token_count` and `selection_method`. For a stricter exploratory
+subset, limit edit size, for example:
+
+```bash
+python -m src.prepare_imdb_contrast --max-changed-tokens 10 --output data/processed/imdb_contrast_negation_small_edits.csv
+```
+
+In the current test set this `<=10`-token exploratory subset contains only 27
+pairs, so do not replace the 318-pair primary analysis with it. Use it only as
+a sensitivity check and report the reduced sample size.
+
+`roberta_base_sst2` is the primary RoBERTa comparison because it shares SST-2
+fine-tuning with BERT and DistilBERT. `roberta_sentiment` is SiEBERT, a larger
+multi-dataset model trained on sentiment sources including IMDb; report it as a
+general-purpose system rather than attributing its advantage solely to the
+RoBERTa architecture.
+
+Experiment summaries are merged by dataset/model instead of overwritten. A
+run-specific copy is also written to `results/summaries/<dataset>.csv`.
 
 ## Suggested poster structure
 

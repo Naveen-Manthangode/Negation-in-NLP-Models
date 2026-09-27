@@ -5,12 +5,22 @@ models:
   distilbert_sst2:
     backend: huggingface
     model_id: distilbert-base-uncased-finetuned-sst-2-english
+    training_domain: SST-2 movie-review sentences
     label_map: {LABEL_0: negative, LABEL_1: positive, NEGATIVE: negative, POSITIVE: positive}
   bert_sst2:
     backend: huggingface
     model_id: textattack/bert-base-uncased-SST-2
+    training_domain: SST-2 movie-review sentences
+    label_map: {LABEL_0: negative, LABEL_1: positive, NEGATIVE: negative, POSITIVE: positive}
+  roberta_base_sst2:
+    backend: huggingface
+    model_id: textattack/roberta-base-SST-2
+    training_domain: SST-2 movie-review sentences
+    description: "Primary controlled RoBERTa comparison with BERT and DistilBERT"
     label_map: {LABEL_0: negative, LABEL_1: positive, NEGATIVE: negative, POSITIVE: positive}
   roberta_sentiment:
     backend: huggingface
     model_id: siebert/sentiment-roberta-large-english
+    training_domain: Multi-dataset sentiment training including IMDb
+    description: "SiEBERT; report separately because architecture, size, and training data differ"
     label_map: {LABEL_0: negative, LABEL_1: positive, NEGATIVE: negative, POSITIVE: positive}

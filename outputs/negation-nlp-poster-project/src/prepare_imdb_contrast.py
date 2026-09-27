@@ -6,6 +6,7 @@ a negation cue. Use --all-contrasts for the complete behavioral contrast set.
 """
 from __future__ import annotations
 import argparse
+import difflib
 import re
 import urllib.request
 from pathlib import Path
@@ -32,7 +33,14 @@ def changed_negation_cues(original: str, contrast: str) -> list[str]:
     a, b = tokens(original), tokens(contrast)
     return sorted(cue for cue in CUES if a.count(cue) != b.count(cue))
 
-def convert(split: str, raw_dir: Path, output: Path, negation_only: bool = True) -> pd.DataFrame:
+def changed_token_count(original: str, contrast: str) -> int:
+    """Approximate edit size so broad rewrites can be separated from minimal edits."""
+    a, b = tokens(original), tokens(contrast)
+    edits = (x for x in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes() if x[0] != "equal")
+    return sum(max(a2 - a1, b2 - b1) for _, a1, a2, b1, b2 in edits)
+
+def convert(split: str, raw_dir: Path, output: Path, negation_only: bool = True,
+            max_changed_tokens: int | None = None) -> pd.DataFrame:
     paths = {}
     for variant in ("original", "contrast"):
         path = raw_dir / f"{split}_{variant}.tsv"
@@ -46,7 +54,10 @@ def convert(split: str, raw_dir: Path, output: Path, negation_only: bool = True)
     rows = []
     for i, (a, b) in enumerate(zip(original.itertuples(), contrast.itertuples()), 1):
         cues = changed_negation_cues(a.Text, b.Text)
+        edit_size = changed_token_count(a.Text, b.Text)
         if negation_only and not cues:
+            continue
+        if max_changed_tokens is not None and edit_size > max_changed_tokens:
             continue
         perturbation = "+".join(cues) if cues else "other_human_contrast"
         for variant, item in (("original", a), ("counterpart", b)):
@@ -57,6 +68,8 @@ def convert(split: str, raw_dir: Path, output: Path, negation_only: bool = True)
                 "gold_label": str(item.Sentiment).lower(),
                 "variant": variant,
                 "source": "allenai_imdb_contrast_set",
+                "selection_method": "changed_negation_cue_count" if cues else "all_contrasts",
+                "changed_token_count": edit_size,
             })
     result = pd.DataFrame(rows)
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -71,8 +84,10 @@ def main() -> None:
     p.add_argument("--raw-dir", type=Path, default=Path("data/raw/imdb_contrast"))
     p.add_argument("--output", type=Path, default=Path("data/processed/imdb_contrast_negation.csv"))
     p.add_argument("--all-contrasts", action="store_true", help="Keep edits unrelated to negation too")
+    p.add_argument("--max-changed-tokens", type=int, help="Optional stricter subset by token-level edit size")
     a = p.parse_args()
-    convert(a.split, a.raw_dir, a.output, negation_only=not a.all_contrasts)
+    convert(a.split, a.raw_dir, a.output, negation_only=not a.all_contrasts,
+            max_changed_tokens=a.max_changed_tokens)
 
 if __name__ == "__main__":
     main()

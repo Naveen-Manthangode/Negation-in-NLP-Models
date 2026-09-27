@@ -1,4 +1,6 @@
 .venv/
+.idea/
+.DS_Store
 __pycache__/
 .pytest_cache/
 *.pyc
@@ -8,4 +10,3 @@ results/figures/*
 results/*.csv
 results/*.md
 results/*.tex
-

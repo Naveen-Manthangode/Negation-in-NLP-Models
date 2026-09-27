@@ -12,7 +12,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-METRICS = ("accuracy_original", "accuracy_counterpart", "expected_flip_accuracy", "paired_both_correct")
+METRICS = ("accuracy_original", "accuracy_counterpart", "prediction_change_matches_gold", "paired_both_correct")
 
 def pair_table(df: pd.DataFrame) -> pd.DataFrame:
     original = df[df.variant == "original"].set_index("pair_id")
@@ -22,7 +22,7 @@ def pair_table(df: pd.DataFrame) -> pd.DataFrame:
     table["accuracy_counterpart"] = (counterpart.prediction == counterpart.gold_label).astype(float)
     gold_flip = original.gold_label != counterpart.gold_label
     predicted_flip = original.prediction != counterpart.prediction
-    table["expected_flip_accuracy"] = (gold_flip == predicted_flip).astype(float)
+    table["prediction_change_matches_gold"] = (gold_flip == predicted_flip).astype(float)
     table["paired_both_correct"] = table.accuracy_original * table.accuracy_counterpart
     return table
 
@@ -81,6 +81,9 @@ def main() -> None:
                                     "mcnemar_exact_p": p_value, "n_pairs": len(common)})
     out = Path("results/significance"); out.mkdir(parents=True, exist_ok=True)
     ci = pd.DataFrame(ci_rows); comparisons = pd.DataFrame(comparison_rows)
+    comparisons["bonferroni_threshold"] = 0.05 / len(comparisons)
+    comparisons["p_bonferroni"] = np.minimum(1.0, comparisons.mcnemar_exact_p * len(comparisons))
+    comparisons["significant_after_bonferroni"] = comparisons.p_bonferroni < 0.05
     ci.to_csv(out / "bootstrap_confidence_intervals.csv", index=False)
     comparisons.to_csv(out / "mcnemar_model_comparisons.csv", index=False)
     print("\n95% paired bootstrap confidence intervals")

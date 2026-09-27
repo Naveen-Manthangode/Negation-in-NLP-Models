@@ -8,6 +8,18 @@ import yaml
 from .prepare_data import prepare
 from .evaluate import evaluate
 
+def upsert_csv(path: Path, new: pd.DataFrame, keys: list[str]) -> None:
+    """Preserve unrelated runs while replacing rows with the same logical keys."""
+    if path.exists():
+        old = pd.read_csv(path)
+        if set(keys) <= set(old.columns):
+            old_keys = old[keys].astype(str).agg("\x1f".join, axis=1)
+            new_keys = set(new[keys].astype(str).agg("\x1f".join, axis=1))
+            old = old[~old_keys.isin(new_keys)]
+            new = pd.concat([old, new], ignore_index=True)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    new.to_csv(path, index=False)
+
 def main() -> None:
     p = argparse.ArgumentParser(); p.add_argument("--models", nargs="+", default=["rule_based"]); p.add_argument("--device", type=int, default=-1); p.add_argument("--batch-size", type=int, default=16)
     p.add_argument("--data", type=Path, default=Path("data/processed/pairs.csv")); p.add_argument("--dataset-name", default="controlled_negation")
@@ -19,13 +31,16 @@ def main() -> None:
     for name in a.models:
         if name not in configs: raise ValueError(f"Unknown model {name}; choose from {list(configs)}")
         pred, metrics = evaluate(processed, Path(f"results/predictions/{a.dataset_name}__{name}.csv"), name, configs[name], a.device, a.batch_size)
-        rows.append({"dataset": a.dataset_name, "model": name, "model_id": configs[name].get("model_id", "local_rule_based_baseline"), "run_utc": datetime.now(timezone.utc).isoformat(), **metrics})
+        rows.append({"dataset": a.dataset_name, "model": name, "model_id": configs[name].get("model_id", "local_rule_based_baseline"), "training_domain": configs[name].get("training_domain", "not_applicable"), "run_utc": datetime.now(timezone.utc).isoformat(), **metrics, "n_truncated": int(pred.was_truncated.sum())})
         for kind, group in pred.groupby("perturbation_type"):
             counterpart = group[group.variant != "original"]
             breakdown.append({"dataset": a.dataset_name, "model": name, "perturbation_type": kind, "n_pairs": len(counterpart), "counterpart_accuracy": counterpart.correct.mean(), "mean_counterpart_confidence": counterpart.confidence.mean()})
     Path("results").mkdir(exist_ok=True)
-    pd.DataFrame(rows).to_csv("results/summary_metrics.csv", index=False)
-    pd.DataFrame(breakdown).to_csv("results/by_negation_type.csv", index=False)
-    print(pd.DataFrame(rows)[["dataset", "model", "accuracy_original", "accuracy_counterpart", "expected_flip_accuracy", "paired_both_correct"]].to_string(index=False))
+    summary = pd.DataFrame(rows); detail = pd.DataFrame(breakdown)
+    upsert_csv(Path("results/summary_metrics.csv"), summary, ["dataset", "model"])
+    upsert_csv(Path("results/by_negation_type.csv"), detail, ["dataset", "model", "perturbation_type"])
+    summary_dir = Path("results/summaries"); summary_dir.mkdir(parents=True, exist_ok=True)
+    summary.to_csv(summary_dir / f"{a.dataset_name}.csv", index=False)
+    print(summary[["dataset", "model", "accuracy_original", "accuracy_counterpart", "prediction_change_matches_gold", "paired_both_correct", "n_truncated"]].to_string(index=False))
 
 if __name__ == "__main__": main()

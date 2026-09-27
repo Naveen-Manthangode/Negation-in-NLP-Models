@@ -11,7 +11,9 @@ def save(fig, name):
 def main():
     sns.set_theme(style="whitegrid", context="talk")
     summary=pd.read_csv("results/summary_metrics.csv")
-    long=summary.melt(id_vars=["dataset","model"], value_vars=["accuracy_original","accuracy_counterpart","expected_flip_accuracy","paired_both_correct"], var_name="metric", value_name="score")
+    if "prediction_change_matches_gold" not in summary and "expected_flip_accuracy" in summary:
+        summary["prediction_change_matches_gold"] = summary["expected_flip_accuracy"]
+    long=summary.melt(id_vars=["dataset","model"], value_vars=["accuracy_original","accuracy_counterpart","prediction_change_matches_gold","paired_both_correct"], var_name="metric", value_name="score")
     long["system"] = long["dataset"] + " / " + long["model"]
     fig,ax=plt.subplots(figsize=(11,6)); sns.barplot(long,x="system",y="score",hue="metric",ax=ax); ax.set_ylim(0,1); ax.set_ylabel("Score"); ax.set_xlabel(""); ax.tick_params(axis="x",rotation=20); ax.legend(title="Metric",bbox_to_anchor=(1.02,1),loc="upper left"); save(fig,"model_comparison")
     by=pd.read_csv("results/by_negation_type.csv"); by["system"] = by["dataset"] + " / " + by["model"]; pivot=by.pivot(index="system",columns="perturbation_type",values="counterpart_accuracy")
